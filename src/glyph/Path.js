@@ -19,6 +19,9 @@ export default class Path {
     this.commands = [];
     this._bbox = null;
     this._cbox = null;
+    if ('Path2D' in window) {
+      this.vectorPath = new Path2D();
+    }
   }
 
   /**
@@ -176,6 +179,11 @@ export default class Path {
 for (let command of ['moveTo', 'lineTo', 'quadraticCurveTo', 'bezierCurveTo', 'closePath']) {
   Path.prototype[command] = function(...args) {
     this._bbox = this._cbox = null;
+
+    if (this.vectorPath) {
+      this.vectorPath[command].apply(args);
+    }
+
     this.commands.push({
       command,
       args

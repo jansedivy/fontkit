@@ -189,9 +189,14 @@ export default class Glyph {
     let scale = 1 / this._font.head.unitsPerEm * size;
     ctx.scale(scale, scale);
 
-    let fn = this.path.toFunction();
-    fn(ctx);
-    ctx.fill();
+    if (this.path.vectorPath) {
+      ctx.fill(this.path.vectorPath);
+    } else {
+      let fn = this.path.toFunction();
+      fn(ctx);
+      ctx.fill();
+    }
+
 
     ctx.restore();
   }
